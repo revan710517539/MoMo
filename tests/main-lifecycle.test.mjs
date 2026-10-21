@@ -11,8 +11,8 @@ const source=fs.readFileSync(new URL('../electron/main.cjs',import.meta.url),'ut
 const bundle=()=>({title:'计数工具',description:'仅本地测试',html:'<output>0</output>',css:'',js:'',permissions:[],inputHint:'输入'});
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 const tick=()=>new Promise(r=>setImmediate(r));
-async function fixture({fetchImpl,authenticated=true}={}){
- const tools=new Map(),tasks=new Map(),operations=new Map(),settings={initialized:true},handlers=new Map(),windows=[];
+async function fixture({fetchImpl,authenticated=true,initialPet}={}){
+ const tools=new Map(),tasks=new Map(),operations=new Map(),settings={initialized:true,...(initialPet?{pet:initialPet}:{})},handlers=new Map(),windows=[];
  let dbClosed=false,engine,calls=[],exitCode,capabilityCreations=0,companion,optimizer,petController;
  const lifecycle=[];
  const copy=value=>structuredClone(value);
@@ -362,4 +362,17 @@ test('accepting a pet suggestion navigates once through main and unfolds once; d
  assert.equal(result.intent,undefined);
  assert.equal(f.windows[0].webContents.sent.filter(message=>message.channel==='momo:pet-action').length,before+1);
  assert.equal(f.lifecycle.filter(item=>item==='pet:unfold').length,1);
+});
+
+
+test('desktop companion defaults visible on each launch without losing appearance or quiet preference',async()=>{
+ const saved={name:'桌边小兔',style:'rose',visible:false,quiet:true,imageData:null};
+ const f=await fixture({authenticated:false,initialPet:saved});
+ assert.equal(f.settings.pet.visible,true);
+ assert.equal(f.settings.pet.name,saved.name);assert.equal(f.settings.pet.style,saved.style);assert.equal(f.settings.pet.quiet,true);
+ assert.equal((await f.call('getPetState')).code,'AUTH_REQUIRED');
+ await f.call('authLogin',{});assert.equal((await f.call('getPetState')).visible,true);
+ await f.call('updatePet',{visible:false});assert.equal((await f.call('getPetState')).visible,false);
+ const restarted=await fixture({initialPet:f.settings.pet});assert.equal((await restarted.call('getPetState')).visible,true);
+ await f.call('authLogout');await f.call('authLogin',{});assert.equal((await f.call('getPetState')).visible,true);
 });

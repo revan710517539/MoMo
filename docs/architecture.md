@@ -94,3 +94,7 @@ V1 使用 CLI 适配而不是另起 OpenCode 常驻服务器：易于隔离任�
 
 ## 0.7 循环连接资产
 默认AnimatedPet视频引用改为momo-actions-loop.webm（404帧24fps）。原362帧完整前缀不动，离线追加42帧解剖配准/预乘纹理/SDF轮廓连接；运行时不合成、不增加第二媒体控制器。原生video循环、visibility/quiet/retry、双击恢复协议不变。原媒体momo-actions.webm可直接切回。
+
+### 0.7.4 桌面显示恢复规则
+
+Electron主进程是宠物显示状态的权威。启动时读取已存pet外观与偏好，只将visible恢复true并写回；登录认证通过后显示独立窗口。界面可在本次运行中临时隐藏，下次启动恢复。未认证/退出仍隐藏，前台观察权限与业务数据不变。AnimatedPet默认媒体为momo-actions-settle.webm（20秒），复用既有原生loop。
