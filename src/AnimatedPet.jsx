@@ -1,8 +1,8 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {createVideoPetPlayback} from './video-pet-playback.js';
 import './animated-pet.css';
-const VIDEO=`${import.meta.env.BASE_URL}assets/momo-actions-continuous.webm`;
-const POSTER=`${import.meta.env.BASE_URL}assets/momo-actions-poster.png`;
+const VIDEO=`${import.meta.env.BASE_URL}assets/momo-actions-crisp.webm`;
+const POSTER=`${import.meta.env.BASE_URL}assets/momo-actions-crisp-poster.png`;
 export function AnimatedPet({className='',imageOverride,style,alt='奶油色小兔 Momo',interactive=true,motion='ambient',motionState,onClick,...props}){
  const root=useRef(null),video=useRef(null),playback=useRef(null),suppressClicksUntil=useRef(0),[failed,setFailed]=useState(false),[overrideFailed,setOverrideFailed]=useState(false);
  const color=typeof style==='string'?style:'',inlineStyle=style&&typeof style==='object'?style:{};
