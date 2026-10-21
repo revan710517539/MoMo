@@ -49,7 +49,7 @@ test('late play completion cannot restart a hidden or disposed pet',async()=>{
 test('component uses one fixed full-frame video and cleans up when image override changes',async()=>{
  const component=await readFile(new URL('../src/AnimatedPet.jsx',import.meta.url),'utf8');
  const css=await readFile(new URL('../src/animated-pet.css',import.meta.url),'utf8');
- assert.match(component,/assets\/momo-actions-matched\.webm/);assert.match(component,/assets\/momo-actions-poster\.png/);
+ assert.match(component,/assets\/momo-actions-continuous\.webm/);assert.match(component,/assets\/momo-actions-poster\.png/);
  assert.match(component,/muted playsInline loop/);assert.match(css,/object-fit:contain/);
  assert.match(component,/\},\[imageOverride\]\)/);assert.match(component,/player\.dispose\(\)/);
  assert.doesNotMatch(component,/PhotoPetScene|PetScene|requestAnimationFrame|onPointerEnter|currentTime\s*=/);

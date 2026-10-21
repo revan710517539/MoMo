@@ -52,3 +52,7 @@
 复现：先准备原片及翻身RGBA，再运行 `scripts/repair-rabbit-ear.py`、`scripts/prepare-rabbit-matched.py`。补绘参考和固定LUT在 `assets-source/rabbit/`。`scripts/match-rabbit-grade.py`记录固定LUT拟合方式。缺失耳尖是合成估计，纹理补偿只能增强现有细节，无法恢复原片每根毛发的方向；不宣称两个生成来源逐像素相同。
 
 回退：将AnimatedPet默认资产改回 `momo-actions-settle.webm`，或使用0.7.4本机应用包；无需修改账户或用户数据库。
+
+## 0.7.6 循环姿态与光泽连续化
+
+默认momo-actions-continuous.webm，502帧/24fps，约20.917秒。原362帧和翻身105帧均原样、有序保留；原第1帧之后插4帧，翻身入口插6帧，坐稳末步插2帧，翻身出口接原1插10帧。末帧与首帧同为原1。小位移双向光流连接使头部轮廓、局部毛纹和光照逐步过渡，未引入新角色或大幅姿态改造。光流含重采样，不宣称严格零几何变化；本次逐帧及实际应用检查关注五官重影、耳尖折叠、身体比例及画面边距。详见docs/validation-momo076.md。回退默认引用到matched资产或0.7.5应用包，不改数据库。
