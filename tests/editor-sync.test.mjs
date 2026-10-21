@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {editorSync} from '../src/editor-sync.js';
+const a={id:'a',epoch:1,version:1,title:'A',config:{prefix:'春日'},prompt:'整理',bundle:null};
+test('unchanged auto optimization synchronizes version and saved state',()=>assert.deepEqual(editorSync({...a},a,{version:2}),{sameEditor:true,unchanged:true}));
+test('new typing preserves draft while same editor can learn automatic version',()=>assert.deepEqual(editorSync({...a,config:{prefix:'夏日'}},a,{version:2}),{sameEditor:true,unchanged:false}));
+test('save returning after navigation cannot relabel another tool',()=>assert.deepEqual(editorSync({...a,id:'b',epoch:2},a,{version:2}),{sameEditor:false,unchanged:false}));
+test('reopening same tool starts a distinct edit session',()=>assert.equal(editorSync({...a,epoch:3},a,{version:2}).sameEditor,false));
+test('older response cannot declare a newer editor saved',()=>assert.deepEqual(editorSync({...a,version:3},a,{version:2}),{sameEditor:true,unchanged:false}));
+test('new unsaved tool session remains attributable until navigation',()=>assert.equal(editorSync({...a,id:null},{...a,id:null},{version:1}).sameEditor,true));

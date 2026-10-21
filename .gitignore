@@ -1,0 +1,17 @@
+node_modules/
+dist/
+release/
+evidence/
+output/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.log
+__pycache__/
+*.pyc
+build/momo-observer
+electron/unified-account.local.cjs

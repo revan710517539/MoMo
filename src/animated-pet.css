@@ -1,0 +1,5 @@
+.animated-pet{display:inline-block;position:relative;flex-shrink:0;vertical-align:middle;width:100%;height:100%;aspect-ratio:1;animation:none!important;background:transparent;isolation:isolate;user-select:none;-webkit-user-select:none}
+.animated-pet__video,.animated-pet__still,.animated-pet__poster{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;animation:none!important;transform:none!important;transition:none!important;background:transparent}
+.animated-pet__error{position:absolute;bottom:1%;left:50%;transform:translateX(-50%);width:max-content;max-width:96%;padding:4px 7px;border:1px solid #e0c3b8;border-radius:9px;background:#fff8f1;color:#72483e;font:10px/1.35 -apple-system,BlinkMacSystemFont,sans-serif;text-align:center;cursor:pointer;box-shadow:0 2px 8px #53402b15;z-index:1}
+.animated-pet.rose{filter:sepia(.12) hue-rotate(300deg) saturate(1.2)}.animated-pet.lilac{filter:sepia(.2) hue-rotate(175deg) saturate(.75)}
+@media(prefers-reduced-motion:reduce){.animated-pet,.animated-pet__still,.animated-pet__video{animation:none!important;transition:none!important}}
