@@ -71,8 +71,8 @@ test('reference video remains fixed through sleeping, jumping and turning withou
 
 test('reference video clamps externally dragged bounds without a border-triggered flip or autonomous drift',()=>{
  const h=harness();h.controller.start();h.move({x:1100,y:800,width:260,height:500});h.advance(9000);
- assert.deepEqual(h.bounds,{x:940,y:500,width:260,height:500});assert.equal(h.packets.at(-1).direction,1);
+ assert.deepEqual(h.bounds,{x:949,y:509,width:260,height:500});assert.equal(h.packets.at(-1).direction,1);
  const right={...h.bounds};for(let i=0;i<100;i++)h.advance(33);assert.deepEqual(h.bounds,right);
- h.move({x:-1500,y:450,width:260,height:500});h.advance(33);assert.deepEqual(h.bounds,{x:-1440,y:450,width:260,height:500});assert.equal(h.packets.at(-1).direction,1);
+ h.move({x:-1600,y:450,width:260,height:500});h.advance(33);assert.deepEqual(h.bounds,{x:-1511,y:450,width:260,height:500});assert.equal(h.packets.at(-1).direction,1);
  h.controller.dispose();
 });

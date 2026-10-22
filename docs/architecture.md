@@ -98,3 +98,7 @@ V1 使用 CLI 适配而不是另起 OpenCode 常驻服务器：易于隔离任�
 ### 0.7.4 桌面显示恢复规则
 
 Electron主进程是宠物显示状态的权威。启动时读取已存pet外观与偏好，只将visible恢复true并写回；登录认证通过后显示独立窗口。界面可在本次运行中临时隐藏，下次启动恢复。未认证/退出仍隐藏，前台观察权限与业务数据不变。AnimatedPet默认媒体为momo-actions-settle.webm（20秒），复用既有原生loop。
+
+## 桌面交互增量 · 0.7.11
+
+桌面pet.jsx手势→petDrag/petDock固定IPC→pet-controller（系统游标、身体边界、停靠/探出）→onPlacement→settings.pet.position/docked→pet-motion事件→同一透明窗口。停靠保持visible=true，与工作台folded分离；细条位于显示器workArea底边。拖动使用受限的宠物捕获手势坐标和终点即时采样；33ms轮询只读游标，局部转发点作180ms提示，不读取屏幕/键盘/其他窗口内容，不属于工作观察。锁屏/登出停止控制器，renderer失焦取消手势。quiet通过原闭眼帧及48%透明度显示，暂停原视频并保留媒体时间；详见docs/pet-interactions-task.md。

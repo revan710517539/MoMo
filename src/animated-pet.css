@@ -3,3 +3,12 @@
 .animated-pet__error{position:absolute;bottom:1%;left:50%;transform:translateX(-50%);width:max-content;max-width:96%;padding:4px 7px;border:1px solid #e0c3b8;border-radius:9px;background:#fff8f1;color:#72483e;font:10px/1.35 -apple-system,BlinkMacSystemFont,sans-serif;text-align:center;cursor:pointer;box-shadow:0 2px 8px #53402b15;z-index:1}
 .animated-pet.rose{filter:sepia(.12) hue-rotate(300deg) saturate(1.2)}.animated-pet.lilac{filter:sepia(.2) hue-rotate(175deg) saturate(.75)}
 @media(prefers-reduced-motion:reduce){.animated-pet,.animated-pet__still,.animated-pet__video{animation:none!important;transition:none!important}}
+
+/* Sleep uses an untouched closed-eye frame from the original rabbit footage.
+   Only its full rigid image translates by one pixel; anatomy and texture stay fixed. */
+.animated-pet--sleeping>.animated-pet__video,.animated-pet--sleeping>.animated-pet__still,.animated-pet--sleeping>.animated-pet__poster{visibility:hidden}
+.animated-pet__sleep{position:absolute;inset:0;pointer-events:none}
+.animated-pet__sleep>img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none;animation:momo-sleep-breathe 4.8s ease-in-out infinite}
+.animated-pet__zzz{position:absolute;left:49%;top:45%;font:500 clamp(9px,1.1vw,12px)/1 -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:3px;color:#777c68;opacity:.65}
+@keyframes momo-sleep-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.animated-pet__sleep>img{animation:none}}
