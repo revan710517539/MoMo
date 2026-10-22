@@ -101,4 +101,4 @@ Electron主进程是宠物显示状态的权威。启动时读取已存pet外观
 
 ## 桌面交互增量 · 0.7.11
 
-桌面pet.jsx手势→petDrag/petDock固定IPC→pet-controller（系统游标、身体边界、停靠/探出）→onPlacement→settings.pet.position/docked→pet-motion事件→同一透明窗口。停靠保持visible=true，与工作台folded分离；细条位于显示器workArea底边。拖动使用受限的宠物捕获手势坐标和终点即时采样；33ms轮询只读游标，局部转发点作180ms提示，不读取屏幕/键盘/其他窗口内容，不属于工作观察。锁屏/登出停止控制器，renderer失焦取消手势。quiet通过原闭眼帧及48%透明度显示，暂停原视频并保留媒体时间；详见docs/pet-interactions-task.md。
+桌面pet.jsx手势→petDrag/petDock固定IPC→pet-controller（系统游标、身体边界、停靠/探出）→onPlacement→settings.pet.position/docked→pet-motion事件→同一透明窗口。停靠保持visible=true，与工作台folded分离；细条位于显示器workArea底边。拖动使用受限的宠物捕获手势坐标和终点即时采样；33ms轮询只读游标，局部转发点作180ms提示，不读取屏幕/键盘/其他窗口内容，不属于工作观察。macOS靠近顶部压缩透明预留空白、保持185px兔子尺寸，位置以500px逻辑窗口归一化保存；菜单及停靠恢复完整窗口。锁屏/登出停止控制器，renderer失焦取消手势。quiet通过原闭眼帧及48%透明度显示，暂停原视频并保留媒体时间；详见docs/pet-interactions-task.md。

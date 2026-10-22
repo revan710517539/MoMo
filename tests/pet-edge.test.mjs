@@ -104,3 +104,44 @@ test('real global cursor maintains peek after fallback hint expires and then con
  h.cursor({x:b.x+b.width-99,y:990});h.advance(1000);assert.equal(h.state.peek,true);
  h.cursor({x:30,y:30});h.advance(1);h.advance(300);assert.equal(h.state.peek,false);h.dispose();
 });
+
+function dragToTop(h){h.controller.drag({phase:'start',point:{x:760,y:650}});h.controller.drag({phase:'end',point:{x:760,y:-700}});}
+test('top placement compacts only transparent overhead and keeps body at the work-area top',async()=>{
+ const h=fixture();h.start();dragToTop(h);assert.equal(h.bounds.y,0);assert.equal(h.bounds.height,194);assert.equal(h.bounds.width,260);
+ // The 185 DIP body retains its 9 DIP bottom inset instead of becoming smaller.
+ assert.equal(h.bounds.y+h.bounds.height-9-185,0);
+ const {readFile}=await import('node:fs/promises');const css=await readFile(new URL('../src/pet.css',import.meta.url),'utf8');
+ assert.match(css,/\.pet-body\{[^}]*flex-shrink:0/);assert.match(css,/\.pet-body\{[^}]*height:185px/);h.dispose();
+});
+test('dragging compact pet downward restores full-height window without scaling the body',()=>{
+ const h=fixture();h.start();dragToTop(h);assert.equal(h.bounds.height,194);
+ h.controller.drag({phase:'start',point:{x:760,y:80}});h.controller.drag({phase:'end',point:{x:760,y:480}});
+ assert.equal(h.bounds.height,500);assert.equal(h.bounds.y,94);assert.equal(h.bounds.y+h.bounds.height-194,400);h.dispose();
+});
+test('compact placement persists normalized full-height y and restores identical body position',()=>{
+ const h=fixture();h.start();dragToTop(h);const before=h.bounds,position=h.saved.at(-1).position;
+ assert.equal(position.y,before.y+before.height-500);assert.equal(position.y,-306);
+ const restarted=fixture({position,docked:false});restarted.start();assert.deepEqual(restarted.bounds,before);
+ assert.equal(restarted.bounds.y+restarted.bounds.height,before.y+before.height);h.dispose();restarted.dispose();
+});
+test('opening menu from compact pet restores readable 500 DIP window',()=>{
+ const h=fixture();h.start();dragToTop(h);assert.equal(h.bounds.height,194);h.controller.interaction({menu:true});
+ assert.equal(h.bounds.height,500);assert.equal(h.bounds.y,0);assert.equal(h.state.docked,false);h.dispose();
+});
+test('docking compact pet restores full-height edge window; undocking restores compact body placement',()=>{
+ const h=fixture();h.start();dragToTop(h);const compact=h.bounds;h.controller.dock({docked:true});
+ assert.equal(h.bounds.height,500);assert.equal(h.bounds.y+h.bounds.height,1000);assert.equal(h.saved.at(-1).position.y,-306);
+ h.controller.dock({docked:false});assert.deepEqual(h.bounds,compact);assert.equal(h.settings.position.y,-306);h.dispose();
+});
+
+test('normalized compact restore chooses body display despite transparent majority on upper adjacent screen',()=>{
+ const upper={x:0,y:-1000,width:1440,height:1000},lower={x:0,y:0,width:1440,height:1000};
+ let bounds={x:600,y:250,width:260,height:500},nearestCalls=0,matchingCalls=0;
+ const position={x:600,y:-306};
+ const overlap=(b,a)=>Math.max(0,Math.min(b.y+b.height,a.y+a.height)-Math.max(b.y,a.y));
+ // The normalized 500-high rect overlaps upper by 306 DIP, lower by only 194.
+ assert.ok(overlap({...bounds,...position},upper)>overlap({...bounds,...position},lower));
+ const pet={isDestroyed:()=>false,getBounds:()=>({...bounds}),setBounds:b=>{bounds={...b}},setIgnoreMouseEvents:()=>{},webContents:{send:()=>{}}};
+ const controller=createPetController({getMainWindow:()=>null,getPetWindow:()=>pet,getPetState:()=>({visible:true,position}),isAuthenticated:()=>true,screen:{getDisplayNearestPoint:p=>{nearestCalls++;return {workArea:p.y<0?upper:lower}},getDisplayMatching:b=>{matchingCalls++;return {workArea:overlap(b,upper)>overlap(b,lower)?upper:lower}},getCursorScreenPoint:()=>({x:30,y:600})},setIntervalFn:()=>1,clearIntervalFn:()=>{}});
+ controller.start();assert.ok(nearestCalls>0);assert.equal(matchingCalls,0);assert.equal(bounds.y,0);assert.equal(bounds.height,194);assert.equal(bounds.y+bounds.height-194,0);controller.dispose();
+});

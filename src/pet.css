@@ -5,7 +5,7 @@
 
 /* Body dragging is owned by the main process, not Chromium's draggable region. */
 .drag-handle{-webkit-app-region:no-drag;pointer-events:none}
-.pet-body{cursor:grab;touch-action:none;user-select:none;transition:transform 320ms cubic-bezier(.16,1,.3,1),opacity 240ms ease}
+.pet-body{flex-shrink:0;cursor:grab;touch-action:none;user-select:none;transition:transform 320ms cubic-bezier(.16,1,.3,1),opacity 240ms ease}
 .pet-body:active{cursor:grabbing}
 .desktop-pet.is-quiet .pet-body{opacity:.48}
 .pet-actions{transition:transform 320ms cubic-bezier(.16,1,.3,1),opacity 200ms ease}
